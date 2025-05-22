@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import userRoutes from './routes/user.routes.js';
 import gameRoutes from './routes/game.routes.js';
+import categoryRoutes from './routes/category.routes.js'
 
 // Load environment variables
 dotenv.config();
@@ -27,6 +28,7 @@ app.use(limiter);
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/games', gameRoutes);
+app.use("/api/categories", categoryRoutes);
 
 // Not found route handler
 app.use((req, res) => {

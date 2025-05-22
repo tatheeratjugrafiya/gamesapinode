@@ -6,6 +6,8 @@ import {
   getGameById,
   updateGame,
   deleteGame,
+  addCategoriesToGame,
+  removeCategoryFromGame,
 } from '../controllers/game.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
 
@@ -20,6 +22,7 @@ router.post(
   [
     body('name').trim().notEmpty().withMessage('Game name is required'),
     body('additionalInfo').optional().isObject().withMessage('Additional info must be an object'),
+    body('categoryIds').optional().isArray().withMessage('Category IDs must be an array'),
   ],
   createGame
 );
@@ -36,11 +39,24 @@ router.put(
   [
     body('name').optional().trim().notEmpty().withMessage('Game name cannot be empty'),
     body('additionalInfo').optional().isObject().withMessage('Additional info must be an object'),
+    body('categoryIds').optional().isArray().withMessage('Category IDs must be an array'),
   ],
   updateGame
 );
 
 // @route   DELETE /api/games/:id
 router.delete('/:id', deleteGame);
+
+// @route   POST /api/games/:id/categories
+router.post(
+  '/:id/categories',
+  [
+    body('categoryIds').isArray().withMessage('Category IDs must be an array'),
+  ],
+  addCategoriesToGame
+);
+
+// @route   DELETE /api/games/:id/categories/:categoryId
+router.delete('/:id/categories/:categoryId', removeCategoryFromGame);
 
 export default router; 
