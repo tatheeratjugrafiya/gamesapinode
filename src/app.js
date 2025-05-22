@@ -1,14 +1,24 @@
 import express from "express";
+import swaggerUi from 'swagger-ui-express';
 import { gameRouter } from "./modules/games/game.route.js";
 import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import ApiResponse from "./utils/apiResponse.js";
+import specs from './config/swagger.js';
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Swagger Documentation
+app.use('/api-docs', swaggerUi.serve);
+app.get('/api-docs', swaggerUi.setup(specs, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: "Games API Documentation"
+}));
 
 // Routes
 app.use("/api/v1/games", gameRouter);

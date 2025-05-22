@@ -6,6 +6,10 @@ import rateLimit from 'express-rate-limit';
 import userRoutes from './routes/user.routes.js';
 import gameRoutes from './routes/game.routes.js';
 import categoryRoutes from './routes/category.routes.js'
+import specs from './config/swagger.js';
+import swaggerUi from 'swagger-ui-express';
+
+
 
 // Load environment variables
 dotenv.config();
@@ -24,7 +28,12 @@ const limiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
-
+app.use('/api-docs', swaggerUi.serve);
+app.get('/api-docs', swaggerUi.setup(specs, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: "Games API Documentation"
+}));
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/games', gameRoutes);
